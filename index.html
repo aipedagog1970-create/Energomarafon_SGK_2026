@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Хранители Энергии: Миссия "Чистая Беларусь"</title>
+<style>
+/* 🌟 НОВЫЙ КРАСОЧНЫЙ ДИЗАЙН (UI в стиле детских игр) 🌟 */
+:root {
+  --ink: #1e293b;
+  --blue-light: #38bdf8;
+  --blue-dark: #0284c7;
+  --green-light: #34d399;
+  --green-main: #10b981;
+  --green-dark: #047857;
+  --yellow-main: #f59e0b;
+  --yellow-dark: #b45309;
+  --red-light: #fb7185;
+  --red-main: #e11d48;
+  --white: #ffffff;
+  --bg-color: #f0fdf4;
+  --ui-border: #94a3b8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* Красивый градиентный фон */
+  background: radial-gradient(circle at 50% 0%, #e0f2fe 0%, #dcfce7 100%);
+  color: var(--ink);
+  font-family: 'Nunito', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 18px;
+  min-height: 100vh;
+}
+
+/* Объемные кнопки (Push-down эффект) */
+button {
+  font: inherit;
+  min-height: 54px; 
+  padding: 12px 24px; 
+  border: 4px solid var(--ui-border);
+  border-radius: 20px; 
+  background: var(--white); 
+  color: var(--ink); 
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer; 
+  touch-action: manipulation; 
+  transition: all 0.1s ease;
+  box-shadow: 0 6px 0 var(--ui-border);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 var(--ui-border);
+  filter: brightness(1.05);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(6px);
+  box-shadow: none;
+}
+
+button:disabled { 
+  opacity: 0.6; 
+  cursor: not-allowed; 
+  transform: translateY(6px); 
+  box-shadow: none; 
+}
+
+/* Спец. классы кнопок */
+button.primary { 
+  background: var(--green-main); 
+  color: white; 
+  border-color: var(--green-dark); 
+  box-shadow: 0 6px 0 var(--green-dark); 
+}
+button.primary:hover:not(:disabled) { box-shadow: 0 4px 0 var(--green-dark); }
+
+button.action { 
+  background: var(--yellow-main); 
+  color: white; 
+  border-color: var(--yellow-dark); 
+  box-shadow: 0 6px 0 var(--yellow-dark); 
+}
+button.action:hover:not(:disabled) { box-shadow: 0 4px 0 var(--yellow-dark); }
+
+/* Основной контейнер с эффектом карточки */
+#app { 
+  max-width: 900px; 
+  margin: 20px auto; 
+  padding: 0 16px; 
+}
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; padding: 12px 0 20px;
+}
+
+.brand { 
+  font-size: clamp(22px, 5vw, 32px); 
+  font-weight: 900; 
+  color: var(--green-dark); 
+  text-shadow: 2px 2px 0px var(--white);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.stats { display: flex; gap: 12px; flex-wrap: wrap; }
+.stat { 
+  background: var(--white); 
+  border: 3px solid var(--ui-border); 
+  padding: 10px 20px; 
+  border-radius: 16px; 
+  font-weight: 900; 
+  box-shadow: 0 4px 0 var(--ui-border);
+  font-size: 20px;
+}
+
+main {
+  background: var(--white); 
+  border: 4px solid var(--ui-border); 
+  border-radius: 32px;
+  padding: clamp(20px, 5vw, 40px); 
+  min-height: 550px; 
+  box-shadow: 0 12px 0 var(--ui-border);
+  position: relative;
+}
+
+h1 { font-size: clamp(28px, 6vw, 46px); line-height: 1.2; margin: 0 0 20px; color: var(--green-dark); font-weight: 900;}
+h2 { font-size: clamp(24px, 5vw, 34px); margin: 0 0 16px; color: var(--blue-dark); font-weight: 800;}
+p { line-height: 1.6; font-size: 20px; font-weight: 600; color: #334155; }
+
+.center { text-align: center; }
+.actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
+
+/* Игровые сцены */
+.scene {
+  position: relative; 
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd); 
+  border-radius: 24px;
+  padding: 24px; 
+  min-height: 250px; 
+  margin: 20px 0; 
+  border: 4px solid var(--blue-light);
+  overflow: hidden;
+}
+
+.sky { background: linear-gradient(to bottom, #7dd3fc, #fef08a); border-color: #38bdf8; }
+.kitchen-bg { background: linear-gradient(135deg, #fef3c7, #fde68a); border-color: #fbbf24; }
+
+.city { font-size: clamp(50px, 10vw, 90px); letter-spacing: 5px; }
+
+/* Анимации персонажей */
+.smog {
+  display: inline-block; background: #94a3b8; border: 4px solid #475569;
+  border-radius: 40% 60% 50% 50%; padding: 20px 30px;
+  animation: floatCloud 3s ease-in-out infinite; font-size: 50px; line-height: 1;
+  box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+}
+.robot { display: inline-block; font-size: 75px; animation: floatHero 2s ease-in-out infinite; filter: drop-shadow(0 10px 5px rgba(0,0,0,0.2)); }
+.battery { color: var(--red-main); font-weight: 900; animation: pulseFast 0.8s infinite; background: white; padding: 5px 10px; border-radius: 12px; border: 2px solid var(--red-main); display: inline-block; margin-top: 10px;}
+
+@keyframes floatCloud { 50% { transform: translateY(-15px) scale(1.05); } }
+@keyframes floatHero { 50% { transform: translateY(-10px); } }
+@keyframes pulseFast { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } }
+@keyframes shakeWrong { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px) rotate(-5deg); } 75% { transform: translateX(8px) rotate(5deg); } }
+@keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* Прогресс бар */
+.progress { 
+  height: 24px; border-radius: 20px; background: #e2e8f0; overflow: hidden; 
+  margin: 15px 0 25px; border: 3px solid var(--ui-border);
+}
+.progress span { 
+  display: block; height: 100%; width: 0; 
+  background: linear-gradient(90deg, var(--green-light), var(--green-main)); 
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+/* Сетки и карточки */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.card {
+  background: var(--white); border: 4px solid var(--ui-border); border-radius: 20px;
+  padding: 20px; text-align: center; transition: all 0.2s;
+  box-shadow: 0 6px 0 var(--ui-border);
+}
+.card .emoji { font-size: 60px; display: block; margin-bottom: 10px; filter: drop-shadow(0 4px 2px rgba(0,0,0,0.1));}
+.card button { width: 100%; margin-top: 15px; font-size: 16px;}
+.card:hover { transform: translateY(-4px); box-shadow: 0 10px 0 var(--ui-border); }
+.card.wrong { animation: shakeWrong 0.4s; border-color: var(--red-main); background: #ffe4e6; box-shadow: 0 6px 0 var(--red-main); }
+
+/* Сообщения обратной связи (Искорка говорит) */
+.feedback {
+  margin: 20px 0; padding: 20px; border-radius: 20px; background: #f8fafc;
+  border: 4px solid var(--blue-light); min-height: 60px; font-weight: 800; font-size: 20px;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex; gap: 15px; align-items: center;
+  box-shadow: 0 6px 0 var(--blue-light);
+}
+.feedback::before { content: '🤖'; font-size: 40px; }
+.feedback.good { background: #dcfce7; border-color: var(--green-main); color: var(--green-dark); box-shadow: 0 6px 0 var(--green-main);}
+.feedback.warn { background: #fef3c7; border-color: var(--yellow-main); color: var(--yellow-dark); box-shadow: 0 6px 0 var(--yellow-main); }
+.feedback.good::before { content: '✨'; }
+.feedback.warn::before { content: '⚠️'; }
+
+/* Интерактивные предметы (Поиск) */
+.item { font-size: 55px; display: inline-block; margin: 8px; }
+.objects { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+.object-button { 
+  min-width: 150px; background: var(--white); display: flex; flex-direction: column; 
+  align-items: center; justify-content: center; border-radius: 20px;
+}
+.object-button.done { 
+  opacity: 0.6; pointer-events: none; border-color: var(--green-main); 
+  background: #f0fdf4; box-shadow: none; transform: translateY(6px);
+}
+.object-button.done .item { filter: grayscale(100%); }
+
+/* Drag and Drop зоны */
+.drop-zone {
+  background: var(--white); border: 4px dashed var(--ui-border); border-radius: 20px;
+  padding: 16px; min-height: 140px; text-align: center; transition: all 0.2s;
+}
+.drop-zone.drag-over { background: #f0fdf4; border-color: var(--green-main); border-style: solid; transform: scale(1.05); }
+.drop-zone button { width: 100%; margin-top: 12px; font-size: 14px;}
+.trash { font-size: 50px; display: block; margin-bottom: 5px; }
+
+/* Капли */
+#dropArea { position: relative; min-height: 200px; width: 100%; overflow: hidden; }
+.drop {
+  position: absolute; display: inline-flex; align-items: center; justify-content: center;
+  min-width: 60px; min-height: 60px; font-size: 40px;
+  border-radius: 50%; background: rgba(255,255,255,0.9);
+  cursor: pointer; padding: 0; box-shadow: 0 6px 0 #93c5fd; border: 3px solid #60a5fa;
+  animation: popIn 0.2s ease-out;
+}
+.drop:active { transform: scale(1.1); box-shadow: none; margin-top: 6px; }
+.bucket { font-size: 70px; text-align: center; padding: 5px; margin-top: 10px; transition: transform 0.1s;}
+
+/* Генераторы и финал */
+.energy-button { font-size: 45px; min-width: 120px; margin: 10px; border-radius: 50%; width: 100px; height: 100px; padding: 0;}
+.tree { font-size: 110px; transition: filter 1s, transform 1s; }
+
+input {
+    padding: 15px; border-radius: 16px; border: 4px solid var(--ui-border); 
+    width: 100%; max-width: 350px; font-size: 20px; font-family: inherit;
+    font-weight: bold;
+}
+input:focus { outline: none; border-color: var(--green-main); }
+
+@media(max-width: 600px) {
+  #app { padding: 10px; margin: 0;}
+  main { padding: 15px; border-width: 3px; border-radius: 24px; box-shadow: 0 8px 0 var(--ui-border);}
+  h1 { font-size: 26px; }
+  .actions { flex-direction: column; }
+  .actions button { width: 100%; }
+  .stat { font-size: 16px; padding: 8px 12px; }
+  .energy-button { width: 80px; height: 80px; font-size: 35px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="brand">🌱 Хранители Энергии</div>
+  <div class="stats" aria-live="polite">
+    <div class="stat" title="Очки">⭐ <b id="score">0</b></div>
+    <div class="stat" title="Чистота воздуха">💨 <b id="air">50</b>%</div>
+  </div>
+</header>
+<main id="main" aria-live="polite"></main>
+</div>
+
+<script>
+"use strict";
+
+const SETTINGS = {
+  dropDuration: 30, dropsRequired: 15,
+  bikeClicks: 20, bikeDuration: 10,
+  nameMaxLength: 25
+};
+
+const state = {
+  screen: "start", score: 0, cleanAir: 50, smogSize: 100,
+  disabledHouse: new Set(), disabledKitchen: new Set(),
+  dropsCaught: 0, dropsMissed: 0,
+  sortIndex: 0, shopIndex: 0, wordIndex: 0,
+  transport: "", energy: 0, generators: 0, promoCode: "", ecoStatus: "",
+  timers: [], dropInterval: null, dropSeconds: SETTINGS.dropDuration,
+  bikeSeconds: SETTINGS.bikeDuration, bikeCount: 0, audio: null
+};
+
+const $ = id => document.getElementById(id);
+const main = $("main");
+
+// Функция случайного перемешивания массива
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function updateStats() {
+  $("score").textContent = state.score;
+  $("air").textContent = Math.round(state.cleanAir);
+}
+
+function scoreBy(points) { state.score += points; updateStats(); }
+function setAir(value) { state.cleanAir = Math.max(0, Math.min(100, value)); updateStats(); }
+
+function later(fn, ms) {
+  const id = setTimeout(fn, ms);
+  state.timers.push(id);
+  return id;
+}
+
+function clearTimers() {
+  state.timers.forEach(clearTimeout);
+  state.timers = [];
+  if (state.dropInterval) clearInterval(state.dropInterval);
+  state.dropInterval = null;
+}
+
+function resetGame() {
+  clearTimers();
+  Object.assign(state, {
+    screen:"start", score:0, cleanAir:50, smogSize:100,
+    disabledHouse:new Set(), disabledKitchen:new Set(), dropsCaught:0, dropsMissed:0,
+    sortIndex:0, shopIndex:0, wordIndex: 0, transport:"",
+    energy:0, generators:0, promoCode:"", ecoStatus:"",
+    dropSeconds:SETTINGS.dropDuration, bikeSeconds:SETTINGS.bikeDuration, bikeCount:0
+  });
+  updateStats();
+  renderStart();
+}
+
+// Встроенный синтезатор звуков (без внешних файлов)
+function sound(freq=550, duration=.1, type="sine") {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!state.audio) state.audio = new AudioContextClass();
+    if (state.audio.state === "suspended") state.audio.resume();
+    
+    const osc = state.audio.createOscillator();
+    const gain = state.audio.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, state.audio.currentTime);
+    
+    if (type === 'triangle') osc.frequency.exponentialRampToValueAtTime(freq*0.5, state.audio.currentTime + duration);
+    if (type === 'square') osc.frequency.exponentialRampToValueAtTime(freq*1.5, state.audio.currentTime + duration);
+
+    gain.gain.setValueAtTime(.1, state.audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001, state.audio.currentTime + duration);
+    
+    osc.connect(gain);
+    gain.connect(state.audio.destination);
+    osc.start();
+    osc.stop(state.audio.currentTime + duration);
+  } catch (e) { console.log("Audio not supported", e); }
+}
+
+// Шаблон обертки экрана (Progress bar на 8 этапов)
+function shell(title, subtitle, content) {
+  const steps = ["house", "kitchen", "drops", "sort", "shop", "words", "transport", "boss", "victory"];
+  const progressPercent = Math.min(100, ((steps.indexOf(state.screen) + 1) / 8) * 100);
+  
+  main.innerHTML = `
+    <h2>${title}</h2>
+    <p>${subtitle}</p>
+    <div class="progress" aria-label="Прогресс миссии"><span style="width:${progressPercent}%"></span></div>
+    ${content}
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>`;
+  updateStats();
+}
+
+function feedback(message, type="good") {
+  const box = $("feedback");
+  if (!box) return;
+  box.hidden = false;
+  box.className = "feedback " + type;
+  box.textContent = message;
+}
+
+// --- АКТ 1: Старт ---
+function renderStart() {
+  state.screen = "start";
+  main.innerHTML = `
+    <section class="center">
+      <h1>Миссия "Чистая Беларусь"</h1>
+      <div class="scene sky">
+        <div class="city">🏘️ 🌳 🏫</div>
+        <div class="smog">☁️<br>😟</div>
+        <div class="robot">🤖</div>
+        <div class="battery">🔋 Садится батарейка!</div>
+      </div>
+      <p>Ой-ой-ой! Герой, в наш Светоград прилетел Грустный Смог! 
+      Жители стали забывать про бережливость, и теперь энергия ускользает из города. 
+      Нам нужно пройти эко-миссии, чтобы вернуть солнце и радость!</p>
+      <div class="actions">
+        <button class="primary" id="startBtn" style="font-size: 24px; padding: 16px 40px;">🚀 НАЧАТЬ ИГРУ</button>
+      </div>
+    </section>`;
+  $("startBtn").addEventListener("click", () => {
+    sound(150, .4, "sawtooth"); 
+    renderHouse();
+  });
+}
+
+// --- АКТ 2: Умный дом (Гостиная) ---
+function renderHouse() {
+  state.screen = "house";
+  shell("Акт 1: Гостиная",
+    "Найди приборы, которые работают впустую и тратят электричество и тепло.",
+    `<div class="scene">
+      <div class="center"><span class="item">🛋️</span><span class="item">🪟</span></div>
+      <div class="objects" id="houseObjects">
+        <button class="object-button" data-object="charger" ${state.disabledHouse.has("charger")?"disabled":""}>
+          <span class="item">📱🔌</span><br>Зарядка в розетке
+        </button>
+        <button class="object-button" data-object="monitor" ${state.disabledHouse.has("monitor")?"disabled":""}>
+          <span class="item">🖥️</span><br>Включенный монитор
+        </button>
+        <button class="object-button" data-object="radiator" ${state.disabledHouse.has("radiator")?"disabled":""}>
+          <span class="item">♨️🌡️</span><br>Горячая батарея
+        </button>
+      </div>
+    </div>
+    <p id="houseHint" class="center" style="color:var(--blue-dark);">Кликни на все три ловушки!</p>
+    <div class="actions"><button id="toKitchen" class="action" disabled>Идем на кухню ➡️</button></div>`);
+  
+  $("houseObjects").querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const obj = btn.dataset.object;
+      if (state.disabledHouse.has(obj)) return;
+      state.disabledHouse.add(obj);
+      scoreBy(10);
+      btn.disabled = true;
+      btn.classList.add("done");
+      
+      if (obj === "charger") {
+        btn.querySelector(".item").textContent = "🔌";
+        sound(200,.15,"square"); 
+        $("houseHint").textContent = "Чпок! Зарядка выдернута.";
+      } else if (obj === "monitor") {
+        btn.querySelector(".item").textContent = "💻";
+        sound(400,.12,"sine");
+        $("houseHint").textContent = "Монитор погас. Энергия сохранена!";
+      } else {
+        btn.querySelector(".item").textContent = "❄️";
+        sound(300,.2,"triangle"); 
+        $("houseHint").textContent = "В комнате жарко? Лучше убавить батарею, а не открывать окно настежь!";
+      }
+      
+      if (state.disabledHouse.size === 3) {
+        $("toKitchen").disabled = false;
+        feedback("Отлично! В гостиной порядок. Поспешим на кухню!");
+      }
+    });
+  });
+  $("toKitchen").addEventListener("click", renderKitchen);
+}
+
+// --- АКТ 2.5: Эко-кухня ---
+function renderKitchen() {
+  state.screen = "kitchen";
+  shell("Акт 2: Эко-кухня",
+    "На кухне тоже прячутся похитители энергии. Исправь 3 ошибки домочадцев!",
+    `<div class="scene kitchen-bg">
+      <div class="center"><span class="item">🍽️</span><span class="item">🪴</span></div>
+      <div class="objects" id="kitchenObjects">
+        <button class="object-button" data-object="fridge" ${state.disabledKitchen.has("fridge")?"disabled":""}>
+          <span class="item">🥶🚪</span><br>Открытый холодильник
+        </button>
+        <button class="object-button" data-object="kettle" ${state.disabledKitchen.has("kettle")?"disabled":""}>
+          <span class="item">♨️🫖</span><br>Чайник кипит впустую
+        </button>
+        <button class="object-button" data-object="bulb" ${state.disabledKitchen.has("bulb")?"disabled":""}>
+          <span class="item">💡</span><br>Старая лампочка
+        </button>
+      </div>
+    </div>
+    <p id="kitchenHint" class="center" style="color:var(--blue-dark);">Кликни на ошибки, чтобы исправить.</p>
+    <div class="actions"><button id="toDrops" class="action" disabled>В ванную ➡️</button></div>`);
+  
+  $("kitchenObjects").querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const obj = btn.dataset.object;
+      if (state.disabledKitchen.has(obj)) return;
+      state.disabledKitchen.add(obj);
+      scoreBy(10);
+      btn.disabled = true;
+      btn.classList.add("done");
+      
+      if (obj === "fridge") {
+        btn.querySelector(".item").textContent = "🧊";
+        sound(150,.2,"square"); 
+        $("kitchenHint").textContent = "Дверца закрыта! Холод не убежит.";
+      } else if (obj === "kettle") {
+        btn.querySelector(".item").textContent = "🫖";
+        sound(600,.1,"sine");
+        $("kitchenHint").textContent = "Чайник выключен. Лишний пар нам не нужен.";
+      } else {
+        btn.querySelector(".item").textContent = "🌟";
+        sound(800,.15,"sine"); 
+        $("kitchenHint").textContent = "Лампочка Ильича заменена на LED! Она светит ярче и бережет энергию.";
+      }
+      
+      if (state.disabledKitchen.size === 3) {
+        $("toDrops").disabled = false;
+        feedback("Молодец! Кухня стала по-настоящему зеленой зоной.");
+      }
+    });
+  });
+  $("toDrops").addEventListener("click", renderDrops);
+}
+
+// --- АКТ 3: Ванная (Ловцы капель) ---
+function renderDrops() {
+  clearTimers();
+  state.screen = "drops";
+  state.dropsCaught = 0;
+  state.dropSeconds = SETTINGS.dropDuration;
+  
+  shell("Акт 3: Ловцы капель",
+    "Из неплотно закрытого крана капает вода. За 30 секунд поймай кликом 15 капель!",
+    `<div class="scene sky center" style="height: 320px; display: flex; flex-direction: column;">
+      <div style="font-size:55px">🚰</div>
+      <div style="display:flex; justify-content:space-between; font-weight:bold; font-size: 20px;">
+        <span style="color:var(--red-main)">Время: <span id="dropTime">30</span> с</span>
+        <span style="color:var(--blue-dark)">Капли: <span id="dropCount">0</span> / 15</span>
+      </div>
+      <div class="progress" style="height:12px; margin-bottom:0;"><span id="dropProgress" style="background:var(--blue-light);"></span></div>
+      <div id="dropArea"></div>
+      <div class="bucket" id="bucketObj">🪣</div>
+    </div>
+    <p class="center" style="font-size: 16px;">Каждая капля — это чистая вода, на перекачку которой насосы тратят ценное электричество!</p>
+    <div class="actions"><button id="finishDrops" class="action" disabled>Выйти во двор ➡️</button></div>`);
+  
+  const area = $("dropArea");
+  const spawnDrop = () => {
+    if (state.screen !== "drops") return;
+    const drop = document.createElement("button");
+    drop.className = "drop";
+    drop.textContent = "💧";
+    const maxX = area.clientWidth - 70;
+    drop.style.left = Math.max(0, Math.floor(Math.random() * maxX)) + "px";
+    drop.style.top = "0px";
+    
+    const anim = drop.animate([
+      { transform: 'translateY(0)' },
+      { transform: `translateY(${area.clientHeight}px)` }
+    ], { duration: 1500 + Math.random() * 500, easing: 'ease-in' });
+
+    drop.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      if (drop.disabled) return;
+      drop.disabled = true;
+      anim.pause();
+      drop.textContent = "✨";
+      
+      const bucket = $("bucketObj");
+      bucket.style.transform = "scale(1.2, 0.8)";
+      setTimeout(()=> {if(bucket) bucket.style.transform = "none"}, 100);
+
+      state.dropsCaught++;
+      scoreBy(2);
+      $("dropCount").textContent = state.dropsCaught;
+      $("dropProgress").style.width = Math.min(100, state.dropsCaught/15*100) + "%";
+      sound(800,.05,"sine"); 
+      
+      drop.style.opacity = 0;
+      setTimeout(() => drop.remove(), 150);
+      
+      if (state.dropsCaught >= SETTINGS.dropsRequired && state.dropSeconds > 0) {
+        $("finishDrops").disabled = false;
+        feedback("Супер! Вся вода спасена от утечки.");
+      }
+    });
+    
+    drop.addEventListener("touchstart", (e) => { e.preventDefault(); drop.dispatchEvent(new Event('mousedown')); });
+
+    anim.onfinish = () => {
+      if (drop.isConnected && !drop.disabled) {
+        drop.remove();
+        setAir(state.cleanAir - 1);
+        sound(150, .1, "sawtooth"); 
+      }
+    };
+    area.appendChild(drop);
+  };
+  
+  for (let i=0; i<3; i++) later(spawnDrop, i*300);
+  state.dropInterval = setInterval(spawnDrop, 600);
+  
+  const clock = setInterval(() => {
+    if (state.screen !== "drops") { clearInterval(clock); return; }
+    state.dropSeconds--;
+    $("dropTime").textContent = state.dropSeconds;
+    if (state.dropSeconds <= 0) {
+      clearInterval(clock);
+      clearInterval(state.dropInterval);
+      state.dropInterval = null;
+      $("finishDrops").disabled = false;
+      if (state.dropsCaught >= SETTINGS.dropsRequired) {
+        feedback("Время вышло! Вода спасена.");
+      } else {
+        feedback("Нужно было поймать минимум 15 капель. Попробуй еще раз!", "warn");
+        $("finishDrops").textContent = "Начать заново 🔄";
+        $("finishDrops").className = "primary";
+      }
+    }
+  }, 1000);
+  state.timers.push(clock);
+  
+  $("finishDrops").addEventListener("click", () => {
+    if (state.dropsCaught < SETTINGS.dropsRequired) { renderDrops(); return; }
+    clearTimers(); renderSorting();
+  });
+}
+
+// --- АКТ 4: Эко-двор (Сортировка Drag and Drop) ---
+const waste = [
+  {id:"paper",name:"МАКУЛАТУРА",emoji:"📚",examples:"Старые тетради, картон",bin:"blue"},
+  {id:"glass",name:"СТЕКЛО",emoji:"🫙",examples:"Баночки, разбитые стаканы",bin:"green"},
+  {id:"plastic",name:"ПЛАСТИК",emoji:"🧴",examples:"ПЭТ-бутылки, пленка",bin:"yellow"},
+  {id:"battery",name:"БАТАРЕЙКИ",emoji:"🔋",examples:"Старые батарейки",bin:"red"},
+  {id:"organic",name:"ОРГАНИКА",emoji:"🍎",examples:"Огрызки и кожура",bin:"organic"}
+];
+
+function renderSorting() {
+  state.screen = "sort";
+  state.sortIndex = 0;
+  
+  shuffleArray(waste); // Перемешиваем предметы для сортировки
+
+  // Данные контейнеров для динамического рендеринга
+  const bins = [
+    { zone: "blue", border: "#3b82f6", text: "#1d4ed8", icon: "🗑️🟦", name: "МАКУЛАТУРА" },
+    { zone: "green", border: "#22c55e", text: "#15803d", icon: "🗑️🟩", name: "СТЕКЛО" },
+    { zone: "yellow", border: "#eab308", text: "#a16207", icon: "🗑️🟨", name: "ПЛАСТИК" },
+    { zone: "red", border: "#ef4444", text: "#b91c1c", icon: "🗑️🟥", name: "БАТАРЕЙКИ" },
+    { zone: "organic", border: "#8b5cf6", text: "#6d28d9", icon: "🍂🟪", name: "КОМПОСТ" }
+  ];
+  shuffleArray(bins); // Перемешиваем контейнеры
+
+  const binsHTML = bins.map(b => `
+    <div class="drop-zone" data-zone="${b.zone}" style="border-color:${b.border}">
+      <span class="trash">${b.icon}</span><b style="color:${b.text}">${b.name}</b>
+      <button class="primary" style="background:${b.border}; border-color:${b.text}; box-shadow: 0 4px 0 ${b.text};" data-bin="${b.zone}">Сюда</button>
+    </div>
+  `).join('');
+
+  shell("Акт 4: Наш Эко-двор",
+    "Перетащи мусор в нужный контейнер (или нажми кнопку 'Сюда'). Будь внимателен!",
+    `<div class="scene" style="background: linear-gradient(135deg, #f1f5f9, #e2e8f0); border-color: #cbd5e1;">
+      <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:20px; margin-bottom: 10px;">
+        <span>Конвейер:</span><span id="sortCount" style="color:var(--blue-dark)">0 / 5</span>
+      </div>
+      
+      <div style="display:flex; justify-content:center; margin-bottom: 25px;">
+          <div id="wasteItem" class="card" draggable="true" style="cursor: grab; width: 100%; max-width: 320px; border-color: var(--blue-main);">
+            <span class="emoji" id="wasteEmoji">📚</span>
+            <b id="wasteName" style="font-size:24px; color:var(--ink)">МАКУЛАТУРА</b>
+            <p id="wasteExample" style="margin:5px 0 0 0; font-size: 16px;"></p>
+          </div>
+      </div>
+      
+      <div class="grid" id="binsGrid">
+        ${binsHTML}
+      </div>
+    </div>`);
+    
+  const wasteCard = $("wasteItem");
+  
+  function showItem() {
+    $("sortCount").textContent = `${state.sortIndex} / ${waste.length}`;
+    if (state.sortIndex >= waste.length) {
+      wasteCard.style.display = "none";
+      feedback("Идеальная сортировка! Раздельный сбор помогает заводам Беларуси экономить ресурсы.");
+      main.insertAdjacentHTML("beforeend", `<div class="actions"><button id="toShop" class="action">В супермаркет 🛒</button></div>`);
+      $("toShop").addEventListener("click", renderShop);
+      $("binsGrid").querySelectorAll("button").forEach(b => b.disabled = true);
+      return;
+    }
+    const item = waste[state.sortIndex];
+    $("wasteEmoji").textContent = item.emoji;
+    $("wasteName").textContent = item.name;
+    $("wasteExample").textContent = item.examples;
+    
+    wasteCard.style.transform = "translateX(-100px) scale(0.8)";
+    wasteCard.style.opacity = "0";
+    setTimeout(() => {
+        wasteCard.style.transform = "translateX(0) scale(1)";
+        wasteCard.style.opacity = "1";
+    }, 50);
+  }
+
+  const handleSort = (selectedBin) => {
+      if (state.sortIndex >= waste.length) return;
+      const item = waste[state.sortIndex];
+      
+      if (selectedBin === item.bin) {
+        if (item.id === "organic") {
+          feedback("Верно! Это органика, ей место в компосте.", "good");
+          sound(400, .1); 
+        } else {
+          scoreBy(15);
+          sound(900, .1, "sine"); 
+          feedback("В точку! " + item.name + " пойдет на переработку.");
+        }
+        
+        const zone = document.querySelector(`.drop-zone[data-zone="${selectedBin}"]`);
+        if(zone) {
+            zone.style.transform = "scale(1.1) translateY(-10px)";
+            setTimeout(() => zone.style.transform = "none", 200);
+        }
+        
+        state.sortIndex++;
+        showItem();
+      } else {
+        scoreBy(-5);
+        sound(150, .2, "square");
+        if(item.id === "organic") {
+           feedback("Осторожно! Огрызкам место в компосте, а не в переработке.", "warn");
+        } else {
+           feedback("Упс! Не тот бак. Прочитай надписи на контейнерах.", "warn");
+        }
+        wasteCard.classList.add("wrong");
+        setTimeout(() => wasteCard.classList.remove("wrong"), 400);
+      }
+  };
+
+  wasteCard.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", waste[state.sortIndex].bin);
+    sound(300, .05, "triangle");
+    setTimeout(() => { wasteCard.style.opacity = "0.4"; }, 0);
+  });
+  wasteCard.addEventListener("dragend", () => { wasteCard.style.opacity = "1"; });
+
+  main.querySelectorAll(".drop-zone").forEach(zone => {
+    zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("drag-over"); });
+    zone.addEventListener("dragleave", () => { zone.classList.remove("drag-over"); });
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      zone.classList.remove("drag-over");
+      handleSort(zone.dataset.zone);
+    });
+  });
+
+  main.querySelectorAll("[data-bin]").forEach(btn => {
+    btn.addEventListener("click", () => handleSort(btn.dataset.bin));
+  });
+  
+  showItem();
+}
+
+// --- АКТ 5: Супермаркет ---
+const shopPairs = [
+  { title:"Пара 1: Фрукты", a:"Яблоки из садов Брестчины", ae:"🍏", b:"Экзотика в пластике из-за океана", be:"🥭📦", eco:"a" },
+  { title:"Пара 2: Напитки", a:"Квас в стеклянной бутылке", ae:"🍾", b:"Напиток в многослойном пакете (тетрапак)", be:"🧃", eco:"a" },
+  { title:"Пара 3: Упаковка", a:"Положить в свой тканевый шоппер", ae:"👜", b:"Купить новый пластиковый пакет", be:"🛍️", eco:"a" }
+];
+
+function renderShop() {
+  state.screen = "shop";
+  state.shopIndex = 0;
+  showShopPair();
+}
+
+function showShopPair() {
+  if (state.shopIndex >= shopPairs.length) {
+    main.insertAdjacentHTML("beforeend", `<div class="actions"><button id="toWords" class="action">На улицу 🏙️</button></div>`);
+    $("toWords").addEventListener("click", renderWords);
+    return;
+  }
+  const pair = shopPairs[state.shopIndex];
+  
+  // Собираем варианты в массив и перемешиваем
+  const options = [
+    { id: "a", text: pair.a, emoji: pair.ae },
+    { id: "b", text: pair.b, emoji: pair.be }
+  ];
+  shuffleArray(options);
+  
+  const cardsHTML = options.map(opt => `
+    <div class="card">
+      <span class="emoji">${opt.emoji}</span>
+      <p style="font-weight:bold">${opt.text}</p>
+      <button data-choice="${opt.id}" class="primary">Выбрать</button>
+    </div>
+  `).join('');
+
+  shell("Акт 5: Белорусский супермаркет",
+    "Выбери экологичный товар с минимальным углеродным следом.",
+    `<div style="text-align:center; margin-bottom:20px; font-size:24px; color:var(--blue-dark); font-weight:bold;">${pair.title}</div>
+     <div class="grid">
+       ${cardsHTML}
+     </div>
+     <p class="center" style="margin-top:20px; color:var(--ui-border);">Шаг ${state.shopIndex+1} из 3</p>`);
+     
+  main.querySelectorAll("[data-choice]").forEach(btn=>{
+    btn.addEventListener("click", (e) => {
+      const card = e.target.closest('.card');
+      const isEco = btn.dataset.choice === pair.eco;
+      main.querySelectorAll("[data-choice]").forEach(b => b.disabled = true);
+      
+      if (isEco) {
+        scoreBy(20); setAir(state.cleanAir + 10);
+        card.style.borderColor = "var(--green-main)";
+        card.style.backgroundColor = "#dcfce7";
+        sound(600, .15, "sine");
+        feedback("Отличный выбор! Местные продукты и эко-упаковка берегут природу.");
+      } else {
+        setAir(state.cleanAir - 10);
+        card.classList.add("wrong");
+        sound(200, .2, "triangle");
+        feedback("Не лучший вариант. Долгая доставка и лишний пластик вредят планете.", "warn");
+      }
+      
+      state.shopIndex++;
+      later(showShopPair, 2000); 
+    });
+  });
+}
+
+// --- АКТ 6: Энергия теплого слова ---
+const wordsData = [
+  { q: "Утром ты встретил соседку в подъезде. Твои действия?", a: "Поздороваться и пожелать хорошего дня! 👋", b: "Пройти молча, глядя в телефон. 📱", eco: "a" },
+  { q: "Твой друг расстроен, потому что получил плохую оценку. Что скажешь?", a: "Сам виноват, надо было учить! 😠", b: "Не грусти, давай я помогу тебе с уроками! 🤝", eco: "b" }
+];
+
+function renderWords() {
+  state.screen = "words";
+  state.wordIndex = 0;
+  showWordPair();
+}
+
+function showWordPair() {
+  if (state.wordIndex >= wordsData.length) {
+    main.insertAdjacentHTML("beforeend", `<div class="actions"><button id="toTransport" class="action">В Центральный парк 🌳</button></div>`);
+    $("toTransport").addEventListener("click", renderTransport);
+    return;
+  }
+  const item = wordsData[state.wordIndex];
+  
+  shell("Акт 6: Энергия теплого слова",
+    "Энергия бывает не только электрической, но и душевной! Выбери, как поступить.",
+    `<div class="scene" style="background: linear-gradient(135deg, #fdf4ff, #fae8ff); border-color: #d946ef; text-align:center;">
+       <span class="emoji" style="font-size:70px;">💖</span>
+       <h2 style="color:#a21caf; margin-bottom:30px;">${item.q}</h2>
+       <div style="display:flex; flex-direction:column; gap:15px; align-items:center;">
+          <button data-ans="a" class="primary" style="width:100%; max-width:500px; background:#fff; color:var(--ink); border-color:var(--ui-border); box-shadow: 0 6px 0 var(--ui-border);">${item.a}</button>
+          <button data-ans="b" class="primary" style="width:100%; max-width:500px; background:#fff; color:var(--ink); border-color:var(--ui-border); box-shadow: 0 6px 0 var(--ui-border);">${item.b}</button>
+       </div>
+    </div>`);
+    
+  main.querySelectorAll("[data-ans]").forEach(btn=>{
+    btn.addEventListener("click", (e) => {
+      const isCorrect = btn.dataset.ans === item.eco;
+      main.querySelectorAll("[data-ans]").forEach(b => b.disabled = true);
+      
+      if (isCorrect) {
+        scoreBy(15); setAir(state.cleanAir + 10);
+        btn.style.backgroundColor = "var(--green-light)";
+        sound(800, .15, "sine");
+        feedback("Правильно! Доброе слово дает человеку огромный заряд душевной энергии.");
+      } else {
+        setAir(state.cleanAir - 5);
+        btn.style.backgroundColor = "var(--red-light)";
+        sound(200, .2, "triangle");
+        feedback("Грубость отнимает энергию и портит настроение. Давай будем добрее!", "warn");
+      }
+      
+      state.wordIndex++;
+      later(showWordPair, 2500); 
+    });
+  });
+}
+
+// --- АКТ 7: Транспорт ---
+function renderTransport() {
+  state.screen = "transport";
+  shell("Акт 7: Проспект Светограда",
+    "Смог отступает в парк к Дереву Жизни. Выбери экологичный транспорт, чтобы догнать его.",
+    `<div style="display:flex; justify-content:space-between; font-weight:bold; font-size:20px;">
+        <span>Чистый воздух:</span><span id="airLabel" style="color:var(--green-main)">${Math.round(state.cleanAir)}%</span>
+     </div>
+     <div class="progress" style="height:15px; border-radius:10px;"><span id="airMeter" style="width:${state.cleanAir}%; background:var(--green-main);"></span></div>
+     
+     <div class="scene sky center" style="display:flex; justify-content:space-around; align-items:center; font-size:45px;">
+        <span>🏙️</span> <span style="font-size:30px">➡️</span> <span>🌳</span>
+     </div>
+     
+     <div class="grid">
+       <div class="card">
+         <span class="emoji">🚗💨</span><b>Старое авто</b>
+         <p style="font-size:16px;">Доедешь быстро, но из трубы валит грязный дым.</p>
+         <button data-transport="car">Поехать</button>
+       </div>
+       <div class="card">
+         <span class="emoji">🚌⚡</span><b>Электробус</b>
+         <p style="font-size:16px;">Современный белорусский электробус. Тихо и чисто.</p>
+         <button data-transport="bus" class="primary">Поехать</button>
+       </div>
+       <div class="card">
+         <span class="emoji">🚲🌸</span><b>Велосипед</b>
+         <p style="font-size:16px;">Покрутишь педали — воздух станет идеальным!</p>
+         <button data-transport="bike" class="primary">Поехать</button>
+       </div>
+     </div>`);
+     
+  main.querySelectorAll("[data-transport]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      state.transport = btn.dataset.transport;
+      if (state.transport === "car") {
+        setAir(state.cleanAir - 50);
+        sound(100, .6, "sawtooth"); 
+        feedback("Кхе-кхе! Из трубы повалил дым. Чистота воздуха сильно упала...", "warn");
+        updateAirMeter();
+        later(renderBoss, 2500);
+      } else if (state.transport === "bus") {
+        sound(300, .4, "sine"); 
+        feedback("Пшшш... Двери закрываются. Едем плавно и без выхлопов!");
+        later(renderBoss, 2500);
+      } else {
+        startBikeChallenge();
+      }
+    });
+  });
+}
+
+function updateAirMeter() {
+  const meter=$("airMeter"), label=$("airLabel");
+  if(meter) meter.style.width=state.cleanAir+"%";
+  if(label) label.textContent=Math.round(state.cleanAir)+"%";
+}
+
+function startBikeChallenge() {
+  state.bikeCount = 0;
+  state.bikeSeconds = SETTINGS.bikeDuration;
+  
+  shell("Вело-челлендж",
+    "Крути педали! Быстро нажимай на кнопку.",
+    `<div class="scene center" style="background: linear-gradient(135deg, #bbf7d0, #86efac); border-color:#22c55e;">
+       <div class="item" id="biker" style="font-size:80px; transition: transform 0.1s;">🚴</div>
+       <h2 style="color:#14532d; font-size:40px;"><span id="bikeCount">0</span> / 20</h2>
+       <p style="font-weight:bold; color:var(--red-main);">Осталось: <span id="bikeTime">${state.bikeSeconds}</span> с</p>
+       <div class="progress" style="height:24px;"><span id="bikeProgress" style="background:var(--green-main);"></span></div>
+       <button id="pedal" class="action" style="width:100%; max-width:350px; font-size:24px;">⚡ ЖМИ ПЕДАЛЬ!</button>
+     </div>`);
+     
+  const biker = $("biker");
+  $("pedal").addEventListener("click", () => {
+    if(state.screen !== "bike") return;
+    state.bikeCount++;
+    
+    biker.style.transform = `translateX(${state.bikeCount * 6}px) rotate(${state.bikeCount % 2 === 0 ? 10 : -10}deg)`;
+    $("bikeCount").textContent = state.bikeCount;
+    $("bikeProgress").style.width = Math.min(100, (state.bikeCount/SETTINGS.bikeClicks)*100) + "%";
+    sound(450, .05, "sine"); 
+    
+    if(state.bikeCount >= SETTINGS.bikeClicks) {
+      clearTimers(); scoreBy(30); setAir(100);
+      feedback("Дзинь-дзинь! Воздух сияет зеленым, распускаются цветы! 🌸", "good");
+      $("pedal").disabled = true;
+      later(renderBoss, 2500);
+    }
+  });
+  
+  state.screen="bike";
+  const clock = setInterval(() => {
+    if(state.screen !== "bike") { clearInterval(clock); return; }
+    state.bikeSeconds--;
+    $("bikeTime").textContent = state.bikeSeconds;
+    if(state.bikeSeconds <= 0) {
+      clearInterval(clock);
+      if(state.bikeCount < SETTINGS.bikeClicks){
+        feedback("Не успел! Попробуй крутить педали быстрее.", "warn");
+        $("pedal").disabled = true;
+        main.insertAdjacentHTML("beforeend", `<div class="actions"><button id="restartBike" class="primary">Начать заново 🔄</button></div>`);
+        $("restartBike").addEventListener("click", startBikeChallenge);
+      }
+    }
+  }, 1000);
+  state.timers.push(clock);
+}
+
+// --- АКТ 8: Финал (Генераторы) ---
+function renderBoss() {
+  clearTimers();
+  state.screen = "boss";
+  state.energy = 0; state.generators = 0;
+  
+  shell("Акт 8: Финал в парке",
+    "Смог зажал главное Дерево. Кликай по лучам и ветру, чтобы собрать чистую энергию!",
+    `<div class="scene sky center" style="background: linear-gradient(to bottom, #1e293b, #475569); border-color:#0f172a;">
+      <div style="position:relative; height: 140px;">
+         <div class="smog" id="bossSmog" style="position:absolute; left:50%; transform:translateX(-50%); z-index:2; transition: all 1s;">☁️😠☁️</div>
+         <div class="tree" id="bossTree" style="position:absolute; left:50%; transform:translateX(-50%); z-index:1; filter: grayscale(100%);">🌳</div>
+      </div>
+      
+      <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:20px; color:#fff; margin-top:30px;">
+        <span>Природная энергия:</span><span id="energyLabel" style="color:var(--yellow-main)">0 / 10</span>
+      </div>
+      <div class="progress" style="border-color:#fbbf24;"><span id="energyMeter" style="width:0%; background:var(--yellow-main);"></span></div>
+      
+      <div id="gatherArea" style="display:flex; justify-content:center; gap:20px;">
+        <button class="energy-button action" data-energy="sun">☀️</button>
+        <button class="energy-button action" data-energy="wind" style="background:var(--blue-light); border-color:var(--blue-dark); box-shadow:0 6px 0 var(--blue-dark);">💨</button>
+      </div>
+      
+      <div id="generatorArea" hidden>
+        <h2 style="color:var(--yellow-main); font-size: 32px;">⚡ ЗАПУСК ГЕНЕРАТОРОВ ⚡</h2>
+        <p style="color:#fff">Быстро кликай по кнопкам, чтобы раскрутить турбины!</p>
+        <button class="primary" data-generator="solar" style="width:100%; margin-bottom:15px; font-size:20px;">☀️ СОЛНЕЧНЫЕ ПАНЕЛИ</button>
+        <button class="primary" data-generator="wind" style="width:100%; font-size:20px; background:var(--blue-light); border-color:var(--blue-dark); box-shadow:0 6px 0 var(--blue-dark);">💨 ВЕТРЯКИ</button>
+      </div>
+    </div>`);
+    
+  main.querySelectorAll("[data-energy]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(state.energy >= 10) return;
+      state.energy++; scoreBy(2);
+      btn.style.transform = "scale(0.8)";
+      setTimeout(()=> btn.style.transform = "scale(1)", 100);
+      sound(btn.dataset.energy === "sun" ? 800 : 600, .1, "sine"); 
+      
+      $("energyLabel").textContent = state.energy + " / 10";
+      $("energyMeter").style.width = (state.energy * 10) + "%";
+      
+      if(state.energy === 10) {
+        $("gatherArea").hidden = true; $("generatorArea").hidden = false;
+        feedback("Энергия собрана! Скорее активируй генераторы кликами!", "warn");
+      }
+    });
+  });
+  
+  main.querySelectorAll("[data-generator]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(state.energy < 10 || state.generators >= 10) return;
+      state.generators++; scoreBy(5);
+      
+      btn.style.transform = "scale(1.05) translateY(2px)";
+      setTimeout(()=> btn.style.transform = "translateY(0)", 100);
+      sound(300 + state.generators * 50, .1, "sawtooth"); 
+      
+      const smog = $("bossSmog");
+      smog.style.opacity = 1 - (state.generators / 10);
+      smog.style.transform = `translateX(-50%) scale(${1 - (state.generators * 0.05)})`;
+      
+      if(state.generators >= 10) {
+        setAir(100); state.smogSize = 0;
+        $("bossTree").style.filter = "grayscale(0%)";
+        $("bossTree").style.transform = "translateX(-50%) scale(1.2)";
+        smog.innerHTML = "☁️😊☁️"; 
+        sound(400, 1.5, "sine"); 
+        
+        setTimeout(() => {
+            main.innerHTML = `
+              <section class="center" style="animation: popIn 0.5s ease-out;">
+                <h2 style="font-size:40px; color:var(--green-dark);">Дерево Жизни восстановлено!</h2>
+                <div class="scene sky" style="padding: 40px 0;">
+                  <div class="tree" style="font-size:120px;">🌳</div>
+                  <div class="city" style="font-size:50px; margin-top:20px;">☀️ 🌼 🦋 🌿</div>
+                </div>
+                <p>Ветряки бешено вращаются, солнечные панели светятся! 
+                Мощный поток чистого воздуха сдувает Грустного Смога. 
+                Он улыбается, превращается в белое облако и проливается теплым дождем.</p>
+                <div class="actions">
+                    <button id="toVictory" class="primary" style="font-size:28px; padding: 15px 50px;">УРА! 🏆</button>
+                </div>
+              </section>`;
+            $("toVictory").addEventListener("click", renderVictory);
+        }, 1500);
+      }
+    });
+  });
+}
+
+// --- АКТ 9: Победа и Сертификат ---
+function calculateRank() {
+  if (state.score >= 180) {
+    state.ecoStatus = "Главный Эко-Хранитель"; state.promoCode = "SUPER-HERO";
+  } else if (state.score >= 120) {
+    state.ecoStatus = "Осознанный Эко-Помощник"; state.promoCode = "ECO-CHAMP";
+  } else {
+    state.ecoStatus = "Начинающий Эколог"; state.promoCode = "CLEAN-ROOM";
+  }
+}
+
+function renderVictory() {
+  clearTimers(); state.screen = "victory"; calculateRank();
+  
+  sound(500, 0.2, "square");
+  setTimeout(()=>sound(600, 0.2, "square"), 200);
+  setTimeout(()=>sound(800, 0.5, "square"), 400); 
+  
+  main.innerHTML = `
+    <section class="center">
+      <h1 style="color:var(--green-main); font-size: 45px;">Светоград спасён!</h1>
+      <div class="scene sky">
+        <div class="city">🏘️ 🏫 ☀️</div>
+        <div class="objects" style="font-size:70px; margin-top:10px;"><span class="item">🦬</span><span class="item">🌳</span><span class="item">🤖</span></div>
+      </div>
+      <p style="font-size:22px;">Ты доказал, что твои бережные действия сохраняют энергию и защищают окружающую среду родной Беларуси!</p>
+      
+      <div style="background:#fef3c7; border:5px solid var(--yellow-main); padding:25px; border-radius:24px; margin:30px 0; box-shadow: 0 8px 0 var(--yellow-main);">
+          <h2 style="margin:0 0 10px 0; color:var(--yellow-dark);">Твоё звание:</h2>
+          <div style="font-size:32px; font-weight:900; color:var(--red-main); text-transform: uppercase;">«${state.ecoStatus}»</div>
+          <p style="margin:15px 0 0 0; font-size:24px;">Итоговый счет: ⭐ ${state.score}</p>
+      </div>
+
+      <div class="actions" style="flex-direction:column; align-items:center;">
+        <button id="diplomaBtn" class="primary" style="width:100%; max-width:450px;">🎓 ПОЛУЧИТЬ ИМЕННОЙ ДИПЛОМ</button>
+        <button id="promoBtn" class="action" style="width:100%; max-width:450px;">🎁 СЕКРЕТНЫЙ ПРОМОКОД</button>
+      </div>
+      
+      <div id="diplomaForm" hidden style="margin-top:30px; padding:25px; background:var(--bg-color); border-radius:24px; border:4px dashed var(--green-main);">
+        <h3 style="margin-top:0; font-size: 26px; color:var(--green-dark);">Создание диплома</h3>
+        <label for="playerName" style="display:block; margin-bottom:15px; font-weight:bold; font-size:20px;">Введи своё имя (русскими буквами):</label>
+        <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+            <input type="text" id="playerName" maxlength="25" pattern="[А-Яа-яЁё\\s-]+" autocomplete="off" placeholder="Например: Ваня Иванов">
+            <button id="saveDiploma" class="primary">Печать / Сохранить 🖨️</button>
+        </div>
+        <p id="diplomaError" style="color:var(--red-main); margin-top:15px; font-weight:bold; font-size:18px;" hidden></p>
+      </div>
+      
+      <div id="promoArea" class="feedback good" style="font-size:28px; text-align:center; flex-direction:column;" hidden></div>
+      
+      <div class="actions" style="margin-top:40px;">
+        <button id="again" style="background:#f1f5f9; border-color:#cbd5e1; box-shadow: 0 6px 0 #cbd5e1;">🔄 Играть снова</button>
+      </div>
+    </section>`;
+
+  $("diplomaBtn").addEventListener("click", () => {
+    $("diplomaForm").hidden = false;
+    $("diplomaForm").scrollIntoView({ behavior: 'smooth' });
+    $("playerName").focus();
+  });
+  
+  $("saveDiploma").addEventListener("click", generateDiploma);
+  
+  $("promoBtn").addEventListener("click", () => {
+    $("promoArea").hidden = false;
+    $("promoArea").innerHTML = `Секретный код для родителей:<br><b style="font-size:40px; color:var(--red-main); letter-spacing:3px;">${state.promoCode}</b>`;
+    $("promoArea").scrollIntoView({ behavior: 'smooth' });
+  });
+  
+  $("again").addEventListener("click", resetGame);
+}
+
+// Генерация красивого А4 диплома для печати
+function generateDiploma() {
+  const field = $("playerName");
+  const errorMsg = $("diplomaError");
+  const name = field.value.trim();
+  
+  if (!name || name.length > SETTINGS.nameMaxLength || !/^[А-Яа-яЁё \-]+$/.test(name)) {
+    errorMsg.textContent = "Пожалуйста, введи имя русскими буквами (до 25 символов).";
+    errorMsg.hidden = false;
+    field.style.borderColor = "var(--red-main)";
+    return;
+  }
+  
+  errorMsg.hidden = true; field.style.borderColor = "var(--green-main)";
+  const safeName = escapeHTML(name);
+  const date = new Date().toLocaleDateString("ru-RU");
+  
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("Браузер заблокировал всплывающее окно. Пожалуйста, разрешите всплывающие окна для этого сайта.");
+    return;
+  }
+  
+  printWindow.document.open();
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+      <meta charset="UTF-8">
+      <title>Диплом - ${safeName}</title>
+      <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #064e3b; text-align: center; padding: 0; margin: 0; }
+        .diploma-wrapper { border: 25px solid #34d399; max-width: 1050px; margin: 20px auto; background: #fff; position: relative; overflow: hidden; }
+        .diploma-inner { border: 8px solid #059669; padding: 50px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.04"><text y="50" font-size="50">🌿</text></svg>'); background-size: 100px; }
+        .icons { font-size: 80px; margin-bottom: 20px; letter-spacing: 25px; }
+        h1 { color: #047857; font-size: 70px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: 900; letter-spacing: 4px; text-shadow: 3px 3px 0 #a7f3d0;}
+        h2 { font-size: 32px; color: #10b981; margin: 0 0 40px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .awarded-to { font-size: 26px; color: #475569; font-weight: bold;}
+        .name { font-size: 60px; margin: 20px 0; border-bottom: 4px solid #10b981; padding-bottom: 10px; display: inline-block; min-width: 70%; color: #064e3b; font-weight: 900; }
+        .reason { font-size: 26px; line-height: 1.6; margin: 30px auto; color: #1e293b; max-width: 800px; font-weight: 600;}
+        .status-box { background: #ecfdf5; border: 4px dashed #10b981; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 600px; }
+        .status-title { font-size: 22px; color: #059669; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; font-weight: bold;}
+        .status-value { font-size: 40px; font-weight: 900; color: #e11d48; margin: 0; }
+        .footer { display: flex; justify-content: space-between; margin-top: 60px; font-size: 22px; border-top: 4px solid #6ee7b7; padding-top: 25px; font-weight: bold;}
+        @media print { 
+            body { padding: 0; background: #fff; } 
+            .diploma-wrapper { margin: 0; max-width: 100%; border-width: 15px; } 
+            @page { size: A4 landscape; margin: 0.5cm; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="diploma-wrapper">
+        <div class="diploma-inner">
+          <div class="icons">🌿☀️🌳</div>
+          <h1>ДИПЛОМ</h1>
+          <h2>Проект «Зелёная школа» | Миссия "Чистая Беларусь"</h2>
+          <div class="awarded-to">Настоящим подтверждается, что</div>
+          <div class="name">${safeName}</div>
+          <div class="reason">
+            успешно прошел(ла) миссии по сбережению ресурсов, 
+            спас(ла) Светоград от Грустного Смога и доказал(а), что 
+            ежедневные добрые действия защищают природу нашей родной Беларуси!
+          </div>
+          <div class="status-box">
+            <div class="status-title">Присвоено почетное звание</div>
+            <div class="status-value">🏆 ${escapeHTML(state.ecoStatus)} 🏆</div>
+          </div>
+          <div class="footer">
+            <div>Дата: ${date}</div>
+            <div>Подпись: <em>Робот Искорка 🤖</em></div>
+          </div>
+        </div>
+      </div>
+      <script>
+        // Запуск диалога печати после рендера шрифтов
+        window.onload = () => { setTimeout(() => { window.print(); }, 500); };
+      <\/script>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
+function escapeHTML(value) {
+  return value.replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[ch]);
+}
+
+renderStart();
+</script>
+</body>
+</html>
